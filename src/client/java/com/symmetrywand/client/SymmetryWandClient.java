@@ -8,6 +8,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 public class SymmetryWandClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
+		SymmetryMirrorModelLoading.register();
+
 		SymmetryWandItem.OPEN_GUI = (player, stack, hand) ->
 			net.minecraft.client.Minecraft.getInstance().setScreen(new SymmetryWandScreen(stack, hand));
 

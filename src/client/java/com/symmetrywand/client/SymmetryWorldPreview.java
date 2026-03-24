@@ -6,6 +6,7 @@ import com.symmetrywand.mirror.SymmetryMirror;
 import com.symmetrywand.registry.ModItems;
 import java.util.Random;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,8 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Client-side mirror marker particles (from Create's SymmetryHandler). World-space mirror mesh
- * preview is omitted to avoid version-specific {@code BlockModelRenderer} overload churn.
+ * Client-side mirror marker particles and world-space mirror mesh preview (from Create's {@code SymmetryHandler}).
  */
 public final class SymmetryWorldPreview {
 	private static int tickCounter;
@@ -24,6 +24,7 @@ public final class SymmetryWorldPreview {
 
 	public static void register() {
 		ClientTickEvents.END_CLIENT_TICK.register(SymmetryWorldPreview::clientTick);
+		WorldRenderEvents.AFTER_ENTITIES.register(MirrorPaneWorldRenderer::render);
 	}
 
 	private static void clientTick(Minecraft mc) {

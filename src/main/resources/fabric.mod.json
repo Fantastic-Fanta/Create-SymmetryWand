@@ -1,0 +1,21 @@
+{
+	"schemaVersion": 1,
+	"id": "symmetrywand",
+	"version": "${version}",
+	"name": "Symmetry Wand",
+	"description": "Standalone port of Create's Wand of Symmetry (MIT-licensed assets and logic derived from Create by Creators-of-Create).",
+	"authors": ["Derived from Create (simibubi / Creators-of-Create)"],
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["com.symmetrywand.SymmetryWandMod"],
+		"client": ["com.symmetrywand.client.SymmetryWandClient"]
+	},
+	"mixins": ["symmetrywand.mixins.json"],
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

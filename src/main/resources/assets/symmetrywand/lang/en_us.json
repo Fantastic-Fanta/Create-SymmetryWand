@@ -1,0 +1,15 @@
+{
+	"item.symmetrywand.symmetry_wand": "Symmetry Wand",
+	"itemGroup.symmetrywand.general": "Symmetry Wand",
+	"symmetrywand.screen.title": "Symmetry Wand",
+	"symmetrywand.screen.mirror_type": "Mirror type: %s",
+	"symmetrywand.screen.orientation": "Orientation: %s",
+	"symmetrywand.symmetry.mirror.plane": "Single plane",
+	"symmetrywand.symmetry.mirror.double_plane": "Double plane",
+	"symmetrywand.symmetry.mirror.triple_plane": "Triple plane",
+	"symmetrywand.orientation.along_z": "Along Z",
+	"symmetrywand.orientation.along_x": "Along X",
+	"symmetrywand.orientation.orthogonal": "Orthogonal",
+	"symmetrywand.orientation.diagonal": "Diagonal",
+	"symmetrywand.orientation.horizontal": "Horizontal"
+}

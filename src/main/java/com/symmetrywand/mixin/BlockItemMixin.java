@@ -8,13 +8,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockItem.class)
 public abstract class BlockItemMixin {
+	@Shadow
+	protected abstract BlockState getPlacementState(BlockPlaceContext context);
+
 	@Inject(method = "place", at = @At("RETURN"))
 	private void symmetrywand_afterPlace(BlockPlaceContext context, CallbackInfoReturnable<InteractionResult> cir) {
 		if (!cir.getReturnValue().consumesAction()) {
@@ -28,15 +33,16 @@ public abstract class BlockItemMixin {
 		if (!(player instanceof ServerPlayer serverPlayer)) {
 			return;
 		}
-		BlockPos placed = placementPos(context);
-		SymmetryGameEvents.onBlockPlaced(serverPlayer, placed, level.getBlockState(placed));
-	}
-
-	private static BlockPos placementPos(BlockPlaceContext ctx) {
-		BlockPos click = ctx.getClickedPos();
-		if (ctx.getLevel().getBlockState(click).canBeReplaced(ctx)) {
-			return click;
+		BlockItem self = (BlockItem) (Object) this;
+		BlockPlaceContext adjusted = self.updatePlacementContext(context);
+		if (adjusted == null) {
+			return;
 		}
-		return click.relative(ctx.getClickedFace());
+		BlockState placedState = getPlacementState(adjusted);
+		if (placedState == null) {
+			return;
+		}
+		BlockPos placed = adjusted.getClickedPos();
+		SymmetryGameEvents.onBlockPlaced(serverPlayer, placed, placedState);
 	}
 }

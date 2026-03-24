@@ -74,6 +74,14 @@ public abstract class SymmetryMirror {
 		return element;
 	}
 
+	/**
+	 * Copy with a new anchor position. Used when moving the mirror so {@link net.minecraft.world.item.ItemStack}
+	 * data component updates are detected (mutating the stored instance in place can skip sync).
+	 */
+	public SymmetryMirror withPosition(Vec3 newPos) {
+		return create(getOrientationIndex(), newPos, typeName(), enable);
+	}
+
 	public StringRepresentable getOrientation() {
 		return orientation;
 	}

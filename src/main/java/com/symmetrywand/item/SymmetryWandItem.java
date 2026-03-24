@@ -68,10 +68,11 @@ public class SymmetryWandItem extends Item {
 			return InteractionResult.SUCCESS;
 		}
 
-		if (context.getLevel().isClientSide() || context.getHand() != InteractionHand.MAIN_HAND) {
+		if (context.getLevel().isClientSide()) {
 			return InteractionResult.SUCCESS;
 		}
 
+		// Create wiki: right-click a block to create or move the mirror; right-click air (use) clears it.
 		pos = pos.relative(context.getClickedFace());
 		SymmetryMirror previousElement = wand.get(ModDataComponents.SYMMETRY_WAND);
 
@@ -87,23 +88,24 @@ public class SymmetryWandItem extends Item {
 			newElement.enable = true;
 			wand.set(ModDataComponents.SYMMETRY_WAND_ENABLE, true);
 		} else {
-			previousElement.setPosition(pos3d);
+			// New instance so ItemStack applies the component change (in-place mutation is skipped).
+			SymmetryMirror moved = previousElement.withPosition(pos3d);
 
-			if (previousElement instanceof PlaneMirror) {
-				previousElement.setOrientation(
+			if (moved instanceof PlaneMirror) {
+				moved.setOrientation(
 					(player.getDirection() == Direction.NORTH || player.getDirection() == Direction.SOUTH)
 						? PlaneMirror.Align.XY.ordinal()
 						: PlaneMirror.Align.YZ.ordinal());
 			}
 
-			if (previousElement instanceof CrossPlaneMirror) {
+			if (moved instanceof CrossPlaneMirror) {
 				float rotation = player.getYHeadRot();
 				float abs = Math.abs(rotation % 90);
 				boolean diagonal = abs > 22 && abs < 45 + 22;
-				previousElement.setOrientation(diagonal ? CrossPlaneMirror.Align.D.ordinal() : CrossPlaneMirror.Align.Y.ordinal());
+				moved.setOrientation(diagonal ? CrossPlaneMirror.Align.D.ordinal() : CrossPlaneMirror.Align.Y.ordinal());
 			}
 
-			newElement = previousElement;
+			newElement = moved;
 		}
 
 		wand.set(ModDataComponents.SYMMETRY_WAND, newElement);

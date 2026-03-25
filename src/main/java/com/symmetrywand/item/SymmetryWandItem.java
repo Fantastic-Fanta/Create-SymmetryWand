@@ -28,6 +28,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -187,9 +189,13 @@ public class SymmetryWandItem extends Item {
 
 			if (world.isUnobstructed(block, position, CollisionContext.of(player))) {
 				BlockState blockState = blockSet.get(position);
-				for (Direction face : Direction.values()) {
-					blockState = blockState.updateShape(face, world.getBlockState(position.relative(face)), world,
-						position, position.relative(face));
+				boolean skipNeighborShapeUpdates = blockState.hasProperty(BlockStateProperties.SLAB_TYPE)
+					&& blockState.getValue(BlockStateProperties.SLAB_TYPE) != SlabType.DOUBLE;
+				if (!skipNeighborShapeUpdates) {
+					for (Direction face : Direction.values()) {
+						blockState = blockState.updateShape(face, world.getBlockState(position.relative(face)), world,
+							position, position.relative(face));
+					}
 				}
 
 				if (player.isCreative()) {
